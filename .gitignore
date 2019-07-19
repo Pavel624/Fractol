@@ -1,0 +1,11 @@
+.DS_Store
+.DS
+*/.DS*
+*.o
+*.dSYM
+.vscode
+.idea
+CMakeLists.txt
+cmake-build-debug
+README.md
+fractol
