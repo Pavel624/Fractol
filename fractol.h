@@ -24,11 +24,6 @@
 
 # define KEY_ESC 53
 
-typedef struct	s_fractal
-{
-	char *name;
-}				t_fractal;
-
 typedef struct	s_image
 {
 	void		*image;
@@ -47,14 +42,27 @@ typedef struct	s_mouse
 	int			pressed;
 }				t_mouse;
 
-typedef struct s_render
+typedef struct	s_fractal
 {
+	int			name;
 	void		*mlx;
 	void		*window;
 	t_image		image;
 	t_mouse		mouse;
-	t_fractal *fractal;
+	int			x;
+	int 		y;
+	double		zoom;
+	double		moveX;
+	double		moveY;
+	int 		max_iterations;
+	int			cur_iteration;
+	double 		c_re;
+	double 		c_im;
+}				t_fractal;
 
-}				t_render;
+void		img_pixel_put(t_image *img, int x, int y, int color);
+void		get_color(t_fractal *fractal);
+void		draw(t_fractal *fractal);
+void		julia(t_fractal *fractal);
 
 #endif

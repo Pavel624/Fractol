@@ -24,35 +24,47 @@ static	void	ft_error(char *msg, int i)
     exit(i);
 }
 
-void		initialize_image(t_render *render)
+void draw(t_fractal *fractal)
 {
-	t_image	*image;
+	if (fractal-> name == 0)
+		julia(fractal);
+	else
+		ft_error("Something went wrong\n", 0);
+}
 
-	image = &render->image;
-	image->image = mlx_new_image(render->mlx, WIDTH, HEIGHT);
+int select_fractal(t_fractal *fractal, char* param)
+{
+	if (ft_strcmp("Julia",param) == 0)
+		fractal->name = 0;
+	else if (ft_strcmp("Mandelbrot", param) == 0)
+		fractal-> name = 1;
+	else
+		return (0);
+	return (1);
+}
+
+void			init(t_fractal *fractal)
+{
+	t_image *image;
+
+	image = &fractal->image;
+	fractal->mlx = mlx_init();
+	fractal->window = mlx_new_window(fractal->mlx, WIDTH, HEIGHT, "Fractol");
+	image->image = mlx_new_image(fractal->mlx, WIDTH, HEIGHT);
 	image->ptr = mlx_get_data_addr(image->image, &image->bpp,
 								   &image->line_s, &image->endian);
 	image->bpp /= 8;
 }
 
-void			init(t_render *render)
-{
-
-	render->mlx = mlx_init();
-	render->window = mlx_new_window(render->mlx, WIDTH, HEIGHT, "FDF");
-}
-
 int main(int argc, char *argv[])
 {
-	t_render render;
 	t_fractal fractal;
 
-    if (argc < 2)
-		ft_error("Not enough arguments\n", 0);
-    fractal.name = argv[1];
-    init(&render);
-    initialize_image(&render);
-    mlx_hook(render.window, 17, 0L, close_app, &render);
-    mlx_loop((&render)->mlx);
+    if (argc != 2 || !select_fractal(&fractal, argv[1]))
+		ft_error("usage: ./fractol [Julia]/[Mandelbrot]\n", 0);
+    init(&fractal);
+    draw(&fractal);
+    mlx_hook(fractal.window, 17, 0L, close_app, &fractal);
+    mlx_loop((&fractal)->mlx);
     return (0);
 }
