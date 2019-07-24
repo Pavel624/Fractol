@@ -28,6 +28,8 @@ void draw(t_fractal *fractal)
 {
 	if (fractal-> name == 0)
 		julia(fractal);
+	else if (fractal->name == 1)
+		mandelbrot(fractal);
 	else
 		ft_error("Something went wrong\n", 0);
 }

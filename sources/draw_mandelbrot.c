@@ -1,47 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_julia.c                                       :+:      :+:    :+:   */
+/*   draw_mandelbrot.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nbethany <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/07/23 21:32:00 by nbethany          #+#    #+#             */
-/*   Updated: 2019/07/23 21:32:01 by nbethany         ###   ########.fr       */
+/*   Created: 2019/07/24 21:32:00 by nbethany          #+#    #+#             */
+/*   Updated: 2019/07/24 21:32:01 by nbethany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../fractol.h"
+# include "../fractol.h"
 
-void init_julia(t_fractal *fractal)
+void init_mandelbrot(t_fractal *fractal)
 {
 	fractal->x = 0;
 	fractal->y = 0;
 	fractal->cRe = -0.7;
 	fractal->cIm = -0.54;
 	fractal->zoom = 1;
-	fractal->moveX = 0;
+	fractal->moveX = -0.5;
 	fractal->moveY = 0;
 	fractal->cur_iteration = 0;
-	fractal->max_iterations = 128;
+	fractal->max_iterations = 256;
 }
 
-void julia(t_fractal *fractal)
+void	mandelbrot(t_fractal *fractal)
 {
 	double newRe, newIm, oldRe, oldIm;
-	init_julia(fractal);
+	double pr, pi;
+	init_mandelbrot(fractal);
 	while (fractal->y < HEIGHT)
 	{
 		while (fractal->x < WIDTH)
 		{
-			newRe = 1.5 * (fractal->x - WIDTH / 2) / (0.5 * fractal->zoom * WIDTH) + fractal->moveX;
-			newIm = (fractal->y - HEIGHT / 2) / (0.5 * fractal->zoom * HEIGHT) + fractal->moveY;
-
+			pr = 1.5 * (fractal->x - WIDTH / 2) / (0.5 * fractal->zoom * WIDTH) + fractal->moveX;
+			pi = (fractal->y - HEIGHT / 2) / (0.5 * fractal->zoom * HEIGHT) + fractal->moveY;
+			newRe = newIm = oldRe = oldIm = 0;
 			while (fractal->cur_iteration < fractal->max_iterations)
 			{
 				oldRe = newRe;
 				oldIm = newIm;
-				newRe = pow(oldRe, 2)  - pow(oldIm, 2) + fractal->cRe;
-				newIm = 2 * oldRe * oldIm + fractal->cIm;
+				newRe = pow(oldRe, 2)  - pow(oldIm, 2) + pr;
+				newIm = 2 * oldRe * oldIm + pi;
 				if (pow(newRe, 2) + pow(newIm, 2) > 4)
 					break;
 				fractal->cur_iteration++;
