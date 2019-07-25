@@ -24,6 +24,16 @@
 
 # define KEY_ESC 53
 
+# define KEY_UP 126
+# define KEY_DOWN 125
+# define KEY_LEFT 123
+# define KEY_RIGHT 124
+
+# define KEY_NUMPAD_1 83
+# define KEY_NUMPAD_2 84
+# define KEY_NUMPAD_3 85
+# define KEY_NUMPAD_4 86
+
 typedef struct	s_image
 {
 	void		*image;
@@ -39,7 +49,6 @@ typedef struct	s_mouse
 	double		y;
 	double		x0;
 	double		y0;
-	int			pressed;
 }				t_mouse;
 
 typedef struct	s_fractal
@@ -51,18 +60,29 @@ typedef struct	s_fractal
 	t_mouse		mouse;
 	int			x;
 	int 		y;
+	double 		x1;
+	double 		y1;
 	double		zoom;
 	double		moveX;
 	double		moveY;
 	int 		max_iterations;
 	int			cur_iteration;
-	double 		c_re;
-	double 		c_im;
+	double 		cRe;
+	double 		cIm;
 }				t_fractal;
 
 void		img_pixel_put(t_image *img, int x, int y, int color);
 void		get_color(t_fractal *fractal);
+int			key_down(int key);
+int			mouse_moved(int x, int y, t_fractal *fractal);
+int			mouse_pressed(int button, int x, int y, t_fractal *fractal);
+int			key_trans(int key, t_fractal *fractal);
+void		zoom_in(int x, int y, t_fractal *fractal);
+void		zoom_out(int x, int y, t_fractal *fractal);
 void		draw(t_fractal *fractal);
+void		init_julia(t_fractal *fractal);
 void		julia(t_fractal *fractal);
+void		init_mandelbrot(t_fractal *fractal);
+void		mandelbrot(t_fractal *fractal);
 
 #endif

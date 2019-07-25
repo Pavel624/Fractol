@@ -12,9 +12,8 @@
 
 #include "../fractol.h"
 
-static	int	close_app(void *param)
+static	int	close_app()
 {
-    (void)param;
     exit(0);
 }
 
@@ -37,9 +36,15 @@ void draw(t_fractal *fractal)
 int select_fractal(t_fractal *fractal, char* param)
 {
 	if (ft_strcmp("Julia",param) == 0)
+	{
+		init_julia(fractal);
 		fractal->name = 0;
+	}
 	else if (ft_strcmp("Mandelbrot", param) == 0)
-		fractal-> name = 1;
+	{
+		init_mandelbrot(fractal);
+		fractal->name = 1;
+	}
 	else
 		return (0);
 	return (1);
@@ -58,6 +63,8 @@ void			init(t_fractal *fractal)
 	image->bpp /= 8;
 }
 
+
+
 int main(int argc, char *argv[])
 {
 	t_fractal fractal;
@@ -66,6 +73,11 @@ int main(int argc, char *argv[])
 		ft_error("usage: ./fractol [Julia]/[Mandelbrot]\n", 0);
     init(&fractal);
     draw(&fractal);
+	mlx_key_hook(fractal.window, key_down, &fractal);
+	if (fractal.name == 0)
+		mlx_hook(fractal.window, 6, (1L << 13), mouse_moved, &fractal);
+	mlx_hook(fractal.window, 2, (1L << 0), key_trans, &fractal);
+	mlx_hook(fractal.window, 4, (1L << 2), mouse_pressed, &fractal);
     mlx_hook(fractal.window, 17, 0L, close_app, &fractal);
     mlx_loop((&fractal)->mlx);
     return (0);

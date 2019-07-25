@@ -16,8 +16,10 @@ void init_julia(t_fractal *fractal)
 {
 	fractal->x = 0;
 	fractal->y = 0;
+	fractal->x1 = 0;
+	fractal->y1 = 0;
 	fractal->cRe = -0.7;
-	fractal->cIm = -0.54;
+	fractal->cIm = -0.27;
 	fractal->zoom = 1;
 	fractal->moveX = 0;
 	fractal->moveY = 0;
@@ -28,14 +30,12 @@ void init_julia(t_fractal *fractal)
 void julia(t_fractal *fractal)
 {
 	double newRe, newIm, oldRe, oldIm;
-	init_julia(fractal);
 	while (fractal->y < HEIGHT)
 	{
 		while (fractal->x < WIDTH)
 		{
 			newRe = 1.5 * (fractal->x - WIDTH / 2) / (0.5 * fractal->zoom * WIDTH) + fractal->moveX;
 			newIm = (fractal->y - HEIGHT / 2) / (0.5 * fractal->zoom * HEIGHT) + fractal->moveY;
-
 			while (fractal->cur_iteration < fractal->max_iterations)
 			{
 				oldRe = newRe;
@@ -47,7 +47,7 @@ void julia(t_fractal *fractal)
 				fractal->cur_iteration++;
 			}
 			get_color(fractal);
-			fractal->cur_iteration = 30;
+			fractal->cur_iteration = 70;
 			fractal->x++;
 		}
 		fractal->y++;

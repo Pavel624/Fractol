@@ -1,6 +1,6 @@
 NAME = fractol
 
-SRC  = ./sources/*.c
+SRC  = ./sources/main.c ./sources/additional.c ./sources/draw_julia.c ./sources/draw_mandelbrot.c
 
 OBJ  = $(SRC:.c=.o)
 
