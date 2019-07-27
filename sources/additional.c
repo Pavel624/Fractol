@@ -19,10 +19,10 @@ int			index_matr(int row, int column, int width)
 
 void		get_color(t_fractal *fractal)
 {
-	if (fractal->cur_iteration == fractal -> max_iterations)
+	if (fractal->cur_it == fractal -> max_it)
 		img_pixel_put(&fractal->image, fractal->x, fractal->y, 0);
 	else
-		img_pixel_put(&fractal->image, fractal->x, fractal-> y, fractal->cur_iteration * 1100000);
+		img_pixel_put(&fractal->image, fractal->x, fractal-> y, fractal->cur_it * fractal->color);
 }
 
 void		img_pixel_put(t_image *img, int x, int y, int color)
@@ -69,40 +69,24 @@ int			mouse_moved(int x, int y, t_fractal *fractal)
 	return (0);
 }
 
-void		zoom_in(int x, int y, t_fractal *fractal)
+void	zoom_in(int x, int y, t_fractal *data)
 {
-	double x_new;
-	double y_new;
-
-	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
-	{
-		x_new = x / fractal->zoom + fractal->x1;
-		y_new = y / fractal->zoom + fractal->y1;
-		fractal->zoom *= 1.1;
-		fractal->x1 = x_new - x / fractal->zoom;
-		fractal->y1 = y_new - y / fractal-> zoom;
-		draw(fractal);
-	}
+	data->x1 = (x / data->zoom + data->x1) - (x / (data->zoom * 1.2));
+	data->y1 = (y / data->zoom + data->y1) - (y / (data->zoom * 1.2));
+	data->zoom *= 1.2;
+	data->max_it++;
 }
 
-void		zoom_out(int x, int y, t_fractal *fractal)
+void	zoom_out(int x, int y, t_fractal *data)
 {
-	double x_new;
-	double y_new;
-
-	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
-	{
-		x_new = x / fractal->zoom + fractal->x1;
-		y_new = y / fractal->zoom + fractal->y1;
-		fractal->zoom /= 1.1;
-		fractal->x1 = x_new - x / fractal->zoom;
-		fractal->y1 = y_new - y / fractal-> zoom;
-		draw(fractal);
-	}
+	data->x1 = (x / data->zoom + data->x1)  - (x / (data->zoom / 1.2));
+	data->y1 = (y / data->zoom + data->y1) - (y / (data->zoom / 1.2));
+	data->zoom /= 1.2;
+	data->max_it--;
 }
 
 
-int			mouse_pressed(int button, int x, int y, t_fractal *fractal)
+int			mouse(int button, int x, int y, t_fractal *fractal)
 {
 	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
 	{
@@ -110,6 +94,7 @@ int			mouse_pressed(int button, int x, int y, t_fractal *fractal)
 			zoom_in(x, y, fractal);
 		else if (button == 5)
 			zoom_out(x, y, fractal);
+		calc_fractal(fractal);
 	}
 	return (0);
 }

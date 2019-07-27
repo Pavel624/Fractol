@@ -18,18 +18,17 @@ void init_mandelbrot(t_fractal *fractal)
 	fractal->y = 0;
 	fractal->cRe = -0.7;
 	fractal->cIm = -0.54;
-	fractal->zoom = 1;
+	fractal->zoom = 100;
 	fractal->moveX = -0.5;
 	fractal->moveY = 0;
-	fractal->cur_iteration = 0;
-	fractal->max_iterations = 256;
+	fractal->cur_it = 0;
+	fractal->max_it = 128;
 }
 
 void	mandelbrot(t_fractal *fractal)
 {
 	double newRe, newIm, oldRe, oldIm;
 	double pr, pi;
-	init_mandelbrot(fractal);
 	while (fractal->y < HEIGHT)
 	{
 		while (fractal->x < WIDTH)
@@ -37,7 +36,7 @@ void	mandelbrot(t_fractal *fractal)
 			pr = 1.5 * (fractal->x - WIDTH / 2) / (0.5 * fractal->zoom * WIDTH) + fractal->moveX;
 			pi = (fractal->y - HEIGHT / 2) / (0.5 * fractal->zoom * HEIGHT) + fractal->moveY;
 			newRe = newIm = oldRe = oldIm = 0;
-			while (fractal->cur_iteration < fractal->max_iterations)
+			while (fractal->cur_it < fractal->max_it)
 			{
 				oldRe = newRe;
 				oldIm = newIm;
@@ -45,10 +44,10 @@ void	mandelbrot(t_fractal *fractal)
 				newIm = 2 * oldRe * oldIm + pi;
 				if (pow(newRe, 2) + pow(newIm, 2) > 4)
 					break;
-				fractal->cur_iteration++;
+				fractal->cur_it++;
 			}
 			get_color(fractal);
-			fractal->cur_iteration = 30;
+			fractal->cur_it = 30;
 			fractal->x++;
 		}
 		fractal->y++;

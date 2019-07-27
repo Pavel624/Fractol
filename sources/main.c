@@ -23,28 +23,31 @@ static	void	ft_error(char *msg, int i)
     exit(i);
 }
 
+void calc_fractal(t_fractal *fractal)
+{
+	if (fractal->max_it < 0)
+		fractal->max_it = 0;
+	if (fractal->name == 0)
+		julia_pthread(fractal);
+	else if (fractal->name == 1)
+		mandelbrot(fractal);
+}
+
 void draw(t_fractal *fractal)
 {
 	if (fractal-> name == 0)
-		julia(fractal);
+		init_julia(fractal);
 	else if (fractal->name == 1)
-		mandelbrot(fractal);
-	else
-		ft_error("Something went wrong\n", 0);
+		init_mandelbrot(fractal);
+	calc_fractal(fractal);
 }
 
 int select_fractal(t_fractal *fractal, char* param)
 {
-	if (ft_strcmp("Julia",param) == 0)
-	{
-		init_julia(fractal);
+	if (ft_strcmp("julia",param) == 0)
 		fractal->name = 0;
-	}
-	else if (ft_strcmp("Mandelbrot", param) == 0)
-	{
-		init_mandelbrot(fractal);
+	else if (ft_strcmp("mandelbrot", param) == 0)
 		fractal->name = 1;
-	}
 	else
 		return (0);
 	return (1);
@@ -70,14 +73,11 @@ int main(int argc, char *argv[])
 	t_fractal fractal;
 
     if (argc != 2 || !select_fractal(&fractal, argv[1]))
-		ft_error("usage: ./fractol [Julia]/[Mandelbrot]\n", 0);
+		ft_error("usage: ./fractol [julia]/[mandelbrot]\n", 0);
     init(&fractal);
     draw(&fractal);
-	mlx_key_hook(fractal.window, key_down, &fractal);
-	if (fractal.name == 0)
-		mlx_hook(fractal.window, 6, (1L << 13), mouse_moved, &fractal);
-	mlx_hook(fractal.window, 2, (1L << 0), key_trans, &fractal);
-	mlx_hook(fractal.window, 4, (1L << 2), mouse_pressed, &fractal);
+	mlx_key_hook(fractal.window, key_trans, &fractal);
+	mlx_mouse_hook(fractal.window, mouse, &fractal);
     mlx_hook(fractal.window, 17, 0L, close_app, &fractal);
     mlx_loop((&fractal)->mlx);
     return (0);

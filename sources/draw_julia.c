@@ -14,46 +14,91 @@
 
 void init_julia(t_fractal *fractal)
 {
-	fractal->x = 0;
-	fractal->y = 0;
-	fractal->x1 = 0;
-	fractal->y1 = 0;
-	fractal->cRe = -0.7;
-	fractal->cIm = -0.27;
-	fractal->zoom = 1;
-	fractal->moveX = 0;
-	fractal->moveY = 0;
-	fractal->cur_iteration = 0;
-	fractal->max_iterations = 128;
+	fractal->x1 = -2.0;
+	fractal->y1 = -1.9;
+	fractal->cRe = 0.285;
+	fractal->cIm = 0.01;
+	fractal->zoom = 200;
+	fractal->max_it = 50;
+	fractal->color = 265;
 }
 
-void julia(t_fractal *fractal)
+void	put_pxl_to_img(t_fractal *data, int x, int y, int color)
 {
-	double newRe, newIm, oldRe, oldIm;
-	while (fractal->y < HEIGHT)
+	if (data->x < WIDTH && data->y < WIDTH)
 	{
-		while (fractal->x < WIDTH)
-		{
-			newRe = 1.5 * (fractal->x - WIDTH / 2) / (0.5 * fractal->zoom * WIDTH) + fractal->moveX;
-			newIm = (fractal->y - HEIGHT / 2) / (0.5 * fractal->zoom * HEIGHT) + fractal->moveY;
-			while (fractal->cur_iteration < fractal->max_iterations)
-			{
-				oldRe = newRe;
-				oldIm = newIm;
-				newRe = pow(oldRe, 2)  - pow(oldIm, 2) + fractal->cRe;
-				newIm = 2 * oldRe * oldIm + fractal->cIm;
-				if (pow(newRe, 2) + pow(newIm, 2) > 4)
-					break;
-				fractal->cur_iteration++;
-			}
-			get_color(fractal);
-			fractal->cur_iteration = 70;
-			fractal->x++;
-		}
-		fractal->y++;
-		fractal->x = 0;
+		color = mlx_get_color_value(data->mlx, color);
+		ft_memcpy(data->image.image + 4 * WIDTH * y + x * 4,
+				  &color, sizeof(int));
 	}
-	fractal->x = 0;
-	fractal->y = 0;
-	mlx_put_image_to_window(fractal->mlx, fractal->window, fractal->image.image, 0, 0);
+}
+
+void	julia_init(t_fractal *data)
+{
+	data->max_it = 50;
+	data->zoom = 100;
+	data-> y = 0;
+	data->x1 = -2.0;
+	data->y1 = -1.9;
+	data->color = 1000;
+	data->cRe = 0.285;
+	data->cIm = 0.01;
+}
+
+void	julia_calc(t_fractal *data)
+{
+	data->cRe = data->x / data->zoom + data->x1;
+	data->cIm = data->y / data->zoom + data->y1;
+	data->cur_it = 0;
+	while (data->cRe * data->cRe + data->cIm
+								   * data->cIm < 4 && data->cur_it < data->max_it)
+	{
+		data->tmp = data->cRe;
+		data->cRe = data->cRe * data->cRe -
+					data->cIm * data->cIm - 0.8 + (data->cRe / WIDTH);
+		data->cIm = 2 * data->cIm * data->tmp + data->cIm / WIDTH;
+		data->cur_it++;
+	}
+	get_color(data);
+}
+
+void	*julia(void *tab)
+{
+	int		tmp;
+	t_fractal	*data;
+
+	data = (t_fractal *)tab;
+	data->x = 0;
+	tmp = data->y;
+	while (data->x < WIDTH)
+	{
+		data->y = tmp;
+		while (data->y < data->ymax)
+		{
+			julia_calc(data);
+			data->y++;
+		}
+		data->x++;
+	}
+	return (tab);
+}
+
+void	julia_pthread(t_fractal *data)
+{
+	t_fractal	tab[THREAD_NUMBER];
+	pthread_t	t[THREAD_NUMBER];
+	int			i;
+
+	i = 0;
+	while (i < THREAD_NUMBER)
+	{
+		ft_memcpy((void*)&tab[i], (void*)data, sizeof(t_fractal));
+		tab[i].y = THREAD_WIDTH * i;
+		tab[i].ymax = THREAD_WIDTH * (i + 1);
+		pthread_create(&t[i], NULL, julia, &tab[i]);
+		i++;
+	}
+	while (i--)
+		pthread_join(t[i], NULL);
+	mlx_put_image_to_window(data->mlx, data->window, data->image.image, 0, 0);
 }

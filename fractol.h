@@ -18,9 +18,13 @@
 # include <mlx.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <pthread.h>
 
-# define WIDTH 1600
+# define WIDTH 900
 # define HEIGHT 900
+
+# define THREAD_NUMBER 180
+# define THREAD_WIDTH 5
 
 # define KEY_ESC 53
 
@@ -60,29 +64,33 @@ typedef struct	s_fractal
 	t_mouse		mouse;
 	int			x;
 	int 		y;
+	int			ymax;
 	double 		x1;
 	double 		y1;
 	double		zoom;
 	double		moveX;
 	double		moveY;
-	int 		max_iterations;
-	int			cur_iteration;
+	int 		max_it;
+	int 		tmp;
+	int			cur_it;
+	int			color;
 	double 		cRe;
 	double 		cIm;
 }				t_fractal;
 
 void		img_pixel_put(t_image *img, int x, int y, int color);
 void		get_color(t_fractal *fractal);
-int			key_down(int key);
 int			mouse_moved(int x, int y, t_fractal *fractal);
-int			mouse_pressed(int button, int x, int y, t_fractal *fractal);
 int			key_trans(int key, t_fractal *fractal);
 void		zoom_in(int x, int y, t_fractal *fractal);
 void		zoom_out(int x, int y, t_fractal *fractal);
 void		draw(t_fractal *fractal);
 void		init_julia(t_fractal *fractal);
-void		julia(t_fractal *fractal);
+void		calc_fractal(t_fractal *fractal);
+int			mouse(int mousecode, int x, int y, t_fractal *data);
+void 		*julia(void *data);
 void		init_mandelbrot(t_fractal *fractal);
 void		mandelbrot(t_fractal *fractal);
+void		julia_pthread(t_fractal *fractal);
 
 #endif
