@@ -23,8 +23,8 @@
 # define WIDTH 900
 # define HEIGHT 900
 
-# define THREAD_NUMBER 180
-# define THREAD_WIDTH 5
+# define THREAD_NUMBER 90
+# define THREAD_WIDTH 10
 
 # define KEY_ESC 53
 
@@ -37,6 +37,8 @@
 # define KEY_NUMPAD_2 84
 # define KEY_NUMPAD_3 85
 # define KEY_NUMPAD_4 86
+
+# define KEY_L 37
 
 typedef struct	s_image
 {
@@ -71,11 +73,14 @@ typedef struct	s_fractal
 	double		moveX;
 	double		moveY;
 	int 		max_it;
-	int 		tmp;
+	double 		tmp;
 	int			cur_it;
 	int			color;
 	double 		cRe;
 	double 		cIm;
+	double		zRe;
+	double 		zIm;
+	int 		lock;
 }				t_fractal;
 
 void		img_pixel_put(t_image *img, int x, int y, int color);
@@ -84,13 +89,15 @@ int			mouse_moved(int x, int y, t_fractal *fractal);
 int			key_trans(int key, t_fractal *fractal);
 void		zoom_in(int x, int y, t_fractal *fractal);
 void		zoom_out(int x, int y, t_fractal *fractal);
+int			key_down(int key);
 void		draw(t_fractal *fractal);
 void		init_julia(t_fractal *fractal);
 void		calc_fractal(t_fractal *fractal);
 int			mouse(int mousecode, int x, int y, t_fractal *data);
 void 		*julia(void *data);
 void		init_mandelbrot(t_fractal *fractal);
-void		mandelbrot(t_fractal *fractal);
+void		mandelbrot_pthread(t_fractal *data);
+void		*mandelbrot(void *tab);
 void		julia_pthread(t_fractal *fractal);
 
 #endif

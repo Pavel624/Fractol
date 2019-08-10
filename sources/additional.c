@@ -41,31 +41,40 @@ int			key_down(int key)
 int			key_trans(int key, t_fractal *fractal)
 {
 	if (key == KEY_DOWN)
-		fractal->moveY -= 0.01 / fractal->zoom;
+		fractal->y1 -= 20 / fractal->zoom;
 	else if (key == KEY_UP)
-		fractal->moveY += 0.01 / fractal->zoom;
+		fractal->y1 += 20 / fractal->zoom;
 	else if (key == KEY_LEFT)
-		fractal->moveX += 0.01 / fractal->zoom;
+		fractal->x1 += 20 / fractal->zoom;
 	else if (key == KEY_RIGHT)
-		fractal->moveX -= 0.01 / fractal->zoom;
-	draw(fractal);
+		fractal->x1 -= 20 / fractal->zoom;
+	else if (key == KEY_NUMPAD_1)
+		fractal->color = 265;
+	else if (key == KEY_NUMPAD_2)
+		fractal->color = 100;
+	else if (key == KEY_NUMPAD_3)
+		fractal->color = 800;
+	else if (key == KEY_NUMPAD_4)
+		fractal->color = 1200;
+	else if (key == KEY_L)
+		fractal->lock = fractal->lock == 1 ? 0 : 1;
+	calc_fractal(fractal);
 	return (1);
 }
 
 int			mouse_moved(int x, int y, t_fractal *fractal)
 {
-	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
-	{
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && fractal->lock == 0) {
 		if (x < WIDTH / 2 && y < HEIGHT / 2)
-			fractal->cRe += 0.001;
+			fractal->cRe += 10;
 		else if (x > WIDTH / 2 && y < HEIGHT / 2)
-			fractal->cRe -= 0.001;
+			fractal->cRe -= 10;
 		else if (x < WIDTH / 2 && y > HEIGHT / 2)
-			fractal->cIm += 0.001;
+			fractal->cIm += 10;
 		else if (x > WIDTH / 2 && y > HEIGHT / 2)
-			fractal->cIm -= 0.001;
+			fractal->cIm -= 10;
+		julia_pthread(fractal);
 	}
-	julia(fractal);
 	return (0);
 }
 

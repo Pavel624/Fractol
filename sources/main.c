@@ -30,7 +30,7 @@ void calc_fractal(t_fractal *fractal)
 	if (fractal->name == 0)
 		julia_pthread(fractal);
 	else if (fractal->name == 1)
-		mandelbrot(fractal);
+		mandelbrot_pthread(fractal);
 }
 
 void draw(t_fractal *fractal)
@@ -76,8 +76,10 @@ int main(int argc, char *argv[])
 		ft_error("usage: ./fractol [julia]/[mandelbrot]\n", 0);
     init(&fractal);
     draw(&fractal);
-	mlx_key_hook(fractal.window, key_trans, &fractal);
+	mlx_key_hook(fractal.window, key_down, &fractal);
 	mlx_mouse_hook(fractal.window, mouse, &fractal);
+	mlx_hook(fractal.window, 2, (1L << 0), key_trans, &fractal);
+	mlx_hook(fractal.window, 6, (1L << 13), mouse_moved, &fractal);
     mlx_hook(fractal.window, 17, 0L, close_app, &fractal);
     mlx_loop((&fractal)->mlx);
     return (0);

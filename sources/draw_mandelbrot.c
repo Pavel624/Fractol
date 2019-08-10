@@ -14,46 +14,67 @@
 
 void init_mandelbrot(t_fractal *fractal)
 {
-	fractal->x = 0;
-	fractal->y = 0;
-	fractal->cRe = -0.7;
-	fractal->cIm = -0.54;
-	fractal->zoom = 100;
-	fractal->moveX = -0.5;
-	fractal->moveY = 0;
-	fractal->cur_it = 0;
-	fractal->max_it = 128;
+	fractal->x1 = -2.8;
+	fractal->y1 = -2.3;
+	fractal->zoom = 200;
+	fractal->max_it = 50;
+	fractal->color = 265;
 }
 
-void	mandelbrot(t_fractal *fractal)
+void	mandelbrot_calc(t_fractal *data)
 {
-	double newRe, newIm, oldRe, oldIm;
-	double pr, pi;
-	while (fractal->y < HEIGHT)
+	data->cRe = data->x / data->zoom + data->x1;
+	data->cIm = data->y / data->zoom + data->y1;
+	data->zRe = 0;
+	data->zIm = 0;
+	data->cur_it = 0;
+	while (data->zRe * data->zRe + data->zIm * data->zIm < 4 && data->cur_it < data->max_it)
 	{
-		while (fractal->x < WIDTH)
-		{
-			pr = 1.5 * (fractal->x - WIDTH / 2) / (0.5 * fractal->zoom * WIDTH) + fractal->moveX;
-			pi = (fractal->y - HEIGHT / 2) / (0.5 * fractal->zoom * HEIGHT) + fractal->moveY;
-			newRe = newIm = oldRe = oldIm = 0;
-			while (fractal->cur_it < fractal->max_it)
-			{
-				oldRe = newRe;
-				oldIm = newIm;
-				newRe = pow(oldRe, 2)  - pow(oldIm, 2) + pr;
-				newIm = 2 * oldRe * oldIm + pi;
-				if (pow(newRe, 2) + pow(newIm, 2) > 4)
-					break;
-				fractal->cur_it++;
-			}
-			get_color(fractal);
-			fractal->cur_it = 30;
-			fractal->x++;
-		}
-		fractal->y++;
-		fractal->x = 0;
+		data->tmp = data->zRe;
+		data->zRe = data->zRe * data->zRe - data->zIm * data->zIm + data->cRe;
+		data->zIm = 2 * data->tmp * data->zIm + data->cIm;
+		data->cur_it++;
 	}
-	fractal->x = 0;
-	fractal->y = 0;
-	mlx_put_image_to_window(fractal->mlx, fractal->window, fractal->image.image, 0, 0);
+	get_color(data);
+}
+
+void	*mandelbrot(void *tab)
+{
+	int		tmp;
+	t_fractal	*data;
+
+	data = (t_fractal *)tab;
+	data->x = 0;
+	tmp = data->y;
+	while (data->x < WIDTH)
+	{
+		data->y = tmp;
+		while (data->y < data->ymax)
+		{
+			mandelbrot_calc(data);
+			data->y++;
+		}
+		data->x++;
+	}
+	return (tab);
+}
+
+void	mandelbrot_pthread(t_fractal *data)
+{
+	t_fractal	tab[THREAD_NUMBER];
+	pthread_t	t[THREAD_NUMBER];
+	int			i;
+
+	i = 0;
+	while (i < THREAD_NUMBER)
+	{
+		ft_memcpy((void*)&tab[i], (void*)data, sizeof(t_fractal));
+		tab[i].y = THREAD_WIDTH * i;
+		tab[i].ymax = THREAD_WIDTH * (i + 1);
+		pthread_create(&t[i], NULL, mandelbrot, &tab[i]);
+		i++;
+	}
+	while (i--)
+		pthread_join(t[i], NULL);
+	mlx_put_image_to_window(data->mlx, data->window, data->image.image, 0, 0);
 }

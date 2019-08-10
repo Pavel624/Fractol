@@ -14,49 +14,26 @@
 
 void init_julia(t_fractal *fractal)
 {
-	fractal->x1 = -2.0;
-	fractal->y1 = -1.9;
+	fractal->x1 = -2.3;
+	fractal->y1 = -2.3;
 	fractal->cRe = 0.285;
 	fractal->cIm = 0.01;
 	fractal->zoom = 200;
 	fractal->max_it = 50;
 	fractal->color = 265;
-}
-
-void	put_pxl_to_img(t_fractal *data, int x, int y, int color)
-{
-	if (data->x < WIDTH && data->y < WIDTH)
-	{
-		color = mlx_get_color_value(data->mlx, color);
-		ft_memcpy(data->image.image + 4 * WIDTH * y + x * 4,
-				  &color, sizeof(int));
-	}
-}
-
-void	julia_init(t_fractal *data)
-{
-	data->max_it = 50;
-	data->zoom = 100;
-	data-> y = 0;
-	data->x1 = -2.0;
-	data->y1 = -1.9;
-	data->color = 1000;
-	data->cRe = 0.285;
-	data->cIm = 0.01;
+	fractal->lock = 0;
 }
 
 void	julia_calc(t_fractal *data)
 {
-	data->cRe = data->x / data->zoom + data->x1;
-	data->cIm = data->y / data->zoom + data->y1;
+	data->zRe = data->x / data->zoom + data->x1;
+	data->zIm = data->y / data->zoom + data->y1;
 	data->cur_it = 0;
-	while (data->cRe * data->cRe + data->cIm
-								   * data->cIm < 4 && data->cur_it < data->max_it)
+	while (data->zRe * data->zRe + data->zIm * data->zIm < 4 && data->cur_it < data->max_it)
 	{
-		data->tmp = data->cRe;
-		data->cRe = data->cRe * data->cRe -
-					data->cIm * data->cIm - 0.8 + (data->cRe / WIDTH);
-		data->cIm = 2 * data->cIm * data->tmp + data->cIm / WIDTH;
+		data->tmp = data->zRe;
+		data->zRe = data->zRe * data->zRe - data->zIm * data->zIm - 0.8 + (data->cRe / WIDTH);
+		data->zIm = 2 * data->zIm * data->tmp + data->cIm / WIDTH;
 		data->cur_it++;
 	}
 	get_color(data);
