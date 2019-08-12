@@ -12,9 +12,10 @@
 
 #include "../fractol.h"
 
-static	int	close_app()
+static	int	close_app(void *param)
 {
-    exit(0);
+	(void)param;
+	exit(0);
 }
 
 static	void	ft_error(char *msg, int i)
@@ -31,6 +32,12 @@ void calc_fractal(t_fractal *fractal)
 		julia_pthread(fractal);
 	else if (fractal->name == 1)
 		mandelbrot_pthread(fractal);
+	else if (fractal->name == 2)
+		burning_ship_pthread(fractal);
+	else if (fractal->name == 3)
+		tricorn_pthread(fractal);
+	else if (fractal->name == 4)
+		douady_rabbit_pthread(fractal);
 }
 
 void draw(t_fractal *fractal)
@@ -39,6 +46,12 @@ void draw(t_fractal *fractal)
 		init_julia(fractal);
 	else if (fractal->name == 1)
 		init_mandelbrot(fractal);
+	else if (fractal->name == 2)
+		init_burning_ship(fractal);
+	else if (fractal->name == 3)
+		init_tricorn(fractal);
+	else if (fractal->name == 4)
+		init_douady_rabbit(fractal);
 	calc_fractal(fractal);
 }
 
@@ -48,6 +61,12 @@ int select_fractal(t_fractal *fractal, char* param)
 		fractal->name = 0;
 	else if (ft_strcmp("mandelbrot", param) == 0)
 		fractal->name = 1;
+	else if (ft_strcmp("burning_ship", param) == 0)
+		fractal->name = 2;
+	else if (ft_strcmp("tricorn", param) == 0)
+		fractal->name = 3;
+	else if (ft_strcmp("douady_rabbit", param) == 0)
+		fractal->name = 4;
 	else
 		return (0);
 	return (1);
@@ -73,11 +92,11 @@ int main(int argc, char *argv[])
 	t_fractal fractal;
 
     if (argc != 2 || !select_fractal(&fractal, argv[1]))
-		ft_error("usage: ./fractol [julia]/[mandelbrot]\n", 0);
+		ft_error("usage: ./fractol [julia]/[mandelbrot]/[burning_ship]/[tricorn]/[douady_rabbit]\n", 0);
     init(&fractal);
     draw(&fractal);
 	mlx_key_hook(fractal.window, key_down, &fractal);
-	mlx_mouse_hook(fractal.window, mouse, &fractal);
+	mlx_hook(fractal.window, 4, (1L << 2), mouse, &fractal);
 	mlx_hook(fractal.window, 2, (1L << 0), key_trans, &fractal);
 	mlx_hook(fractal.window, 6, (1L << 13), mouse_moved, &fractal);
     mlx_hook(fractal.window, 17, 0L, close_app, &fractal);

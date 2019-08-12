@@ -63,15 +63,12 @@ typedef struct	s_fractal
 	void		*mlx;
 	void		*window;
 	t_image		image;
-	t_mouse		mouse;
 	int			x;
 	int 		y;
-	int			ymax;
+	int			y_max;
 	double 		x1;
 	double 		y1;
 	double		zoom;
-	double		moveX;
-	double		moveY;
 	int 		max_it;
 	double 		tmp;
 	int			cur_it;
@@ -99,5 +96,11 @@ void		init_mandelbrot(t_fractal *fractal);
 void		mandelbrot_pthread(t_fractal *data);
 void		*mandelbrot(void *tab);
 void		julia_pthread(t_fractal *fractal);
+void		burning_ship_pthread(t_fractal *data);
+void 		init_burning_ship(t_fractal *fractal);
+void		tricorn_pthread(t_fractal *data);
+void 		init_tricorn(t_fractal *fractal);
+void		douady_rabbit_pthread(t_fractal *data);
+void 		init_douady_rabbit(t_fractal *fractal);
 
 #endif

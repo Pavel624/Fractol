@@ -51,11 +51,11 @@ int			key_trans(int key, t_fractal *fractal)
 	else if (key == KEY_NUMPAD_1)
 		fractal->color = 265;
 	else if (key == KEY_NUMPAD_2)
-		fractal->color = 100;
+		fractal->color = 2650;
 	else if (key == KEY_NUMPAD_3)
-		fractal->color = 800;
+		fractal->color = 26500;
 	else if (key == KEY_NUMPAD_4)
-		fractal->color = 1200;
+		fractal->color = 265000;
 	else if (key == KEY_L)
 		fractal->lock = fractal->lock == 1 ? 0 : 1;
 	calc_fractal(fractal);
@@ -80,17 +80,17 @@ int			mouse_moved(int x, int y, t_fractal *fractal)
 
 void	zoom_in(int x, int y, t_fractal *data)
 {
-	data->x1 = (x / data->zoom + data->x1) - (x / (data->zoom * 1.2));
-	data->y1 = (y / data->zoom + data->y1) - (y / (data->zoom * 1.2));
-	data->zoom *= 1.2;
+	data->x1 = (x / data->zoom + data->x1) - (x / (data->zoom * 1.15));
+	data->y1 = (y / data->zoom + data->y1) - (y / (data->zoom * 1.15));
+	data->zoom *= 1.15;
 	data->max_it++;
 }
 
 void	zoom_out(int x, int y, t_fractal *data)
 {
-	data->x1 = (x / data->zoom + data->x1)  - (x / (data->zoom / 1.2));
-	data->y1 = (y / data->zoom + data->y1) - (y / (data->zoom / 1.2));
-	data->zoom /= 1.2;
+	data->x1 = (x / data->zoom + data->x1)  - (x / (data->zoom / 1.15));
+	data->y1 = (y / data->zoom + data->y1) - (y / (data->zoom / 1.15));
+	data->zoom /= 1.15;
 	data->max_it--;
 }
 

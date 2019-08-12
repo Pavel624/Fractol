@@ -1,6 +1,8 @@
 NAME = fractol
 
-SRC  = ./sources/main.c ./sources/additional.c ./sources/draw_julia.c ./sources/draw_mandelbrot.c
+SRC_FILES  = main.c additional.c draw_julia.c draw_mandelbrot.c draw_burning_ship.c draw_tricorn.c draw_douady_rabbit.c
+
+SRC = $(addprefix ./sources/, $(SRC_FILES))
 
 OBJ  = $(SRC:.c=.o)
 
