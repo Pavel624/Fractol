@@ -24,25 +24,47 @@ static	void	ft_error(char *msg, int i)
     exit(i);
 }
 
+void	fractal_pthread(t_fractal *data, void *(f)(void *))
+{
+	t_fractal	fractals[THREAD_NUMBER];
+	pthread_t	threads[THREAD_NUMBER];
+	int			i;
+
+	i = 0;
+	while (i < THREAD_NUMBER)
+	{
+		fractals[i] = *data;
+		fractals[i].y = THREAD_WIDTH * i;
+		fractals[i].y_max = THREAD_WIDTH * (i + 1);
+		pthread_create(&threads[i], NULL, f, &fractals[i]);
+		i++;
+	}
+	while (i--)
+		pthread_join(threads[i], NULL);
+	mlx_put_image_to_window(data->mlx, data->window, data->image.image, 0, 0);
+}
+
 void calc_fractal(t_fractal *fractal)
 {
 	if (fractal->max_it < 0)
 		fractal->max_it = 0;
 	if (fractal->name == 0)
-		julia_pthread(fractal);
+		fractal_pthread(fractal, julia);
 	else if (fractal->name == 1)
-		mandelbrot_pthread(fractal);
+		fractal_pthread(fractal, mandelbrot);
 	else if (fractal->name == 2)
-		burning_ship_pthread(fractal);
+		fractal_pthread(fractal, burning_ship);
 	else if (fractal->name == 3)
-		tricorn_pthread(fractal);
+		fractal_pthread(fractal, tricorn);
 	else if (fractal->name == 4)
-		douady_rabbit_pthread(fractal);
+		fractal_pthread(fractal, douady_rabbit);
+	else if (fractal->name == 5)
+		fractal_pthread(fractal, celtic_mandelbrot);
 }
 
 void draw(t_fractal *fractal)
 {
-	if (fractal-> name == 0)
+	if (fractal->name == 0)
 		init_julia(fractal);
 	else if (fractal->name == 1)
 		init_mandelbrot(fractal);
@@ -52,6 +74,8 @@ void draw(t_fractal *fractal)
 		init_tricorn(fractal);
 	else if (fractal->name == 4)
 		init_douady_rabbit(fractal);
+	else if (fractal->name == 5)
+		init_celtic_mandelbrot(fractal);
 	calc_fractal(fractal);
 }
 
@@ -67,6 +91,8 @@ int select_fractal(t_fractal *fractal, char* param)
 		fractal->name = 3;
 	else if (ft_strcmp("douady_rabbit", param) == 0)
 		fractal->name = 4;
+	else if (ft_strcmp("celtic_mandelbrot", param) == 0)
+		fractal->name = 5;
 	else
 		return (0);
 	return (1);
@@ -92,7 +118,7 @@ int main(int argc, char *argv[])
 	t_fractal fractal;
 
     if (argc != 2 || !select_fractal(&fractal, argv[1]))
-		ft_error("usage: ./fractol [julia]/[mandelbrot]/[burning_ship]/[tricorn]/[douady_rabbit]\n", 0);
+		ft_error("usage: ./fractol [julia]/[mandelbrot]/[burning_ship]/[tricorn]/[douady_rabbit]/[celtic_mandelbrot]\n", 0);
     init(&fractal);
     draw(&fractal);
 	mlx_key_hook(fractal.window, key_down, &fractal);

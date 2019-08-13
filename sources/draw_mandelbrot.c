@@ -58,23 +58,3 @@ void	*mandelbrot(void *tab)
 	}
 	return (tab);
 }
-
-void	mandelbrot_pthread(t_fractal *data)
-{
-	t_fractal	fractals[THREAD_NUMBER];
-	pthread_t	threads[THREAD_NUMBER];
-	int			i;
-
-	i = 0;
-	while (i < THREAD_NUMBER)
-	{
-		fractals[i] = *data;
-		fractals[i].y = THREAD_WIDTH * i;
-		fractals[i].y_max = THREAD_WIDTH * (i + 1);
-		pthread_create(&threads[i], NULL, mandelbrot, &fractals[i]);
-		i++;
-	}
-	while (i--)
-		pthread_join(threads[i], NULL);
-	mlx_put_image_to_window(data->mlx, data->window, data->image.image, 0, 0);
-}

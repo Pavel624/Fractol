@@ -28,7 +28,7 @@ void	burning_ship_calc(t_fractal *data)
 	data->zRe = 0;
 	data->zIm = 0;
 	data->cur_it = 0;
-	while (data->zRe * data->zRe + data->zIm * data->zIm < 4 && data->cur_it < data->max_it)
+	while (data->zRe * data->zRe + data->zIm * data->zIm <= 4 && data->cur_it < data->max_it)
 	{
 		data->tmp = data->zRe * data->zRe - data->zIm * data->zIm + data->cRe;
 		data->zIm = 2 * fabs(data->zRe * data->zIm) + data->cIm;
@@ -57,24 +57,4 @@ void	*burning_ship(void *tab)
 		data->x++;
 	}
 	return (tab);
-}
-
-void	burning_ship_pthread(t_fractal *data)
-{
-	t_fractal	fractals[THREAD_NUMBER];
-	pthread_t	threads[THREAD_NUMBER];
-	int			i;
-
-	i = 0;
-	while (i < THREAD_NUMBER)
-	{
-		fractals[i] = *data;
-		fractals[i].y = THREAD_WIDTH * i;
-		fractals[i].y_max = THREAD_WIDTH * (i + 1);
-		pthread_create(&threads[i], NULL, burning_ship, &fractals[i]);
-		i++;
-	}
-	while (i--)
-		pthread_join(threads[i], NULL);
-	mlx_put_image_to_window(data->mlx, data->window, data->image.image, 0, 0);
 }

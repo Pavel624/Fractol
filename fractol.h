@@ -23,8 +23,8 @@
 # define WIDTH 900
 # define HEIGHT 900
 
-# define THREAD_NUMBER 90
-# define THREAD_WIDTH 10
+# define THREAD_NUMBER 18
+# define THREAD_WIDTH 50
 
 # define KEY_ESC 53
 
@@ -37,6 +37,7 @@
 # define KEY_NUMPAD_2 84
 # define KEY_NUMPAD_3 85
 # define KEY_NUMPAD_4 86
+# define KEY_NUMPAD_5 87
 
 # define KEY_L 37
 
@@ -63,6 +64,7 @@ typedef struct	s_fractal
 	void		*mlx;
 	void		*window;
 	t_image		image;
+	t_mouse		mouse;
 	int			x;
 	int 		y;
 	int			y_max;
@@ -82,25 +84,35 @@ typedef struct	s_fractal
 
 void		img_pixel_put(t_image *img, int x, int y, int color);
 void		get_color(t_fractal *fractal);
-int			mouse_moved(int x, int y, t_fractal *fractal);
+
 int			key_trans(int key, t_fractal *fractal);
+int			key_down(int key);
 void		zoom_in(int x, int y, t_fractal *fractal);
 void		zoom_out(int x, int y, t_fractal *fractal);
-int			key_down(int key);
-void		draw(t_fractal *fractal);
-void		init_julia(t_fractal *fractal);
-void		calc_fractal(t_fractal *fractal);
+int			mouse_moved(int x, int y, t_fractal *fractal);
 int			mouse(int mousecode, int x, int y, t_fractal *data);
-void 		*julia(void *data);
+
+void		init_julia(t_fractal *fractal);
 void		init_mandelbrot(t_fractal *fractal);
-void		mandelbrot_pthread(t_fractal *data);
-void		*mandelbrot(void *tab);
-void		julia_pthread(t_fractal *fractal);
-void		burning_ship_pthread(t_fractal *data);
 void 		init_burning_ship(t_fractal *fractal);
-void		tricorn_pthread(t_fractal *data);
 void 		init_tricorn(t_fractal *fractal);
-void		douady_rabbit_pthread(t_fractal *data);
 void 		init_douady_rabbit(t_fractal *fractal);
+void 		init_celtic_mandelbrot(t_fractal *fractal);
+
+void		julia_calc(t_fractal *data);
+void		mandelbrot_calc(t_fractal *data);
+void		burning_ship_calc(t_fractal *data);
+
+void		fractal_pthread(t_fractal *data, void *(f)(void *));
+
+void		calc_fractal(t_fractal *fractal);
+
+void 		*julia(void *data);
+void		*mandelbrot(void *tab);
+void		*burning_ship(void *tab);
+void		*tricorn(void *tab);
+void		*douady_rabbit(void *tab);
+void		*celtic_mandelbrot(void *tab);
+
 
 #endif

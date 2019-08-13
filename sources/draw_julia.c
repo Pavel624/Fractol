@@ -14,6 +14,10 @@
 
 void init_julia(t_fractal *fractal)
 {
+	fractal->mouse.x0 = 0;
+	fractal->mouse.y0 = 0;
+	fractal->mouse.x = 0;
+	fractal->mouse.y = 0;
 	fractal->x1 = -2.3;
 	fractal->y1 = -2.3;
 	fractal->cRe = 0.285;
@@ -29,7 +33,7 @@ void	julia_calc(t_fractal *data)
 	data->zRe = data->x / data->zoom + data->x1;
 	data->zIm = data->y / data->zoom + data->y1;
 	data->cur_it = 0;
-	while (data->zRe * data->zRe + data->zIm * data->zIm < 4 && data->cur_it < data->max_it)
+	while (data->zRe * data->zRe + data->zIm * data->zIm <= 4 && data->cur_it < data->max_it)
 	{
 		data->tmp = data->zRe;
 		data->zRe = data->zRe * data->zRe - data->zIm * data->zIm - 0.8 + (data->cRe / WIDTH);
@@ -58,24 +62,4 @@ void	*julia(void *tab)
 		data->x++;
 	}
 	return (tab);
-}
-
-void	julia_pthread(t_fractal *data)
-{
-	t_fractal	fractals[THREAD_NUMBER];
-	pthread_t	threads[THREAD_NUMBER];
-	int			i;
-
-	i = 0;
-	while (i < THREAD_NUMBER)
-	{
-		fractals[i] = *data;
-		fractals[i].y = THREAD_WIDTH * i;
-		fractals[i].y_max = THREAD_WIDTH * (i + 1);
-		pthread_create(&threads[i], NULL, julia, &fractals[i]);
-		i++;
-	}
-	while (i--)
-		pthread_join(threads[i], NULL);
-	mlx_put_image_to_window(data->mlx, data->window, data->image.image, 0, 0);
 }

@@ -28,7 +28,7 @@ void	douady_rabbit_calc(t_fractal *data)
 	data->zRe = data->x / data->zoom + data->x1;
 	data->zIm = data->y / data->zoom + data->y1;
 	data->cur_it = 0;
-	while (data->zRe * data->zRe + data->zIm * data->zIm < 4 && data->cur_it < data->max_it)
+	while (data->zRe * data->zRe + data->zIm * data->zIm <= 4 && data->cur_it < data->max_it)
 	{
 		data->tmp = data->zRe * data->zRe - data->zIm * data->zIm - data->cRe;
 		data->zIm = 2 * data->zRe * data->zIm + data->cIm;
@@ -57,24 +57,4 @@ void	*douady_rabbit(void *tab)
 		data->x++;
 	}
 	return (tab);
-}
-
-void	douady_rabbit_pthread(t_fractal *data)
-{
-	t_fractal	fractals[THREAD_NUMBER];
-	pthread_t	threads[THREAD_NUMBER];
-	int			i;
-
-	i = 0;
-	while (i < THREAD_NUMBER)
-	{
-		fractals[i] = *data;
-		fractals[i].y = THREAD_WIDTH * i;
-		fractals[i].y_max = THREAD_WIDTH * (i + 1);
-		pthread_create(&threads[i], NULL, douady_rabbit, &fractals[i]);
-		i++;
-	}
-	while (i--)
-		pthread_join(threads[i], NULL);
-	mlx_put_image_to_window(data->mlx, data->window, data->image.image, 0, 0);
 }
