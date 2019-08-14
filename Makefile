@@ -1,6 +1,9 @@
 NAME = fractol
 
-SRC_FILES  = main.c additional.c draw_julia.c draw_mandelbrot.c draw_burning_ship.c draw_tricorn.c draw_douady_rabbit.c draw_celtic_mandelbrot.c
+SRC_FILES  = main.c additional.c mouse.c fractal_additional.c\
+             draw_julia.c draw_mandelbrot.c draw_burning_ship.c\
+             draw_tricorn.c draw_douady_rabbit.c draw_celtic_mandelbrot.c\
+             draw_heart_mandelbrot.c
 
 SRC = $(addprefix ./sources/, $(SRC_FILES))
 
@@ -11,7 +14,7 @@ FLAGS = -Wall -Werror -Wextra -O3
 OSVER := $(shell uname -s)
 
 ifeq ($(OSVER), Linux)
-	LIBFLAGS = -lmlx -lXext -lX11 minilibx/libmlx.a -lm
+	LIBFLAGS = -lmlx -lXext -pthread -lX11 minilibx/libmlx.a -lm
 else
 	LIBFLAGS = -framework OpenGL -framework AppKit -lm -lmlx
 endif

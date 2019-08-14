@@ -23,8 +23,8 @@
 # define WIDTH 900
 # define HEIGHT 900
 
-# define THREAD_NUMBER 18
-# define THREAD_WIDTH 50
+# define THREAD_NUMBER 30
+# define THREAD_WIDTH (HEIGHT / THREAD_NUMBER)
 
 # define KEY_ESC 53
 
@@ -71,9 +71,9 @@ typedef struct	s_fractal
 	double 		x1;
 	double 		y1;
 	double		zoom;
+	int			cur_it;
 	int 		max_it;
 	double 		tmp;
-	int			cur_it;
 	int			color;
 	double 		cRe;
 	double 		cIm;
@@ -82,11 +82,20 @@ typedef struct	s_fractal
 	int 		lock;
 }				t_fractal;
 
+/*
+** additional.c
+*/
+
+void		print_menu();
 void		img_pixel_put(t_image *img, int x, int y, int color);
 void		get_color(t_fractal *fractal);
-
 int			key_trans(int key, t_fractal *fractal);
 int			key_down(int key);
+
+/*
+** mouse.c
+*/
+
 void		zoom_in(int x, int y, t_fractal *fractal);
 void		zoom_out(int x, int y, t_fractal *fractal);
 int			mouse_moved(int x, int y, t_fractal *fractal);
@@ -98,21 +107,22 @@ void 		init_burning_ship(t_fractal *fractal);
 void 		init_tricorn(t_fractal *fractal);
 void 		init_douady_rabbit(t_fractal *fractal);
 void 		init_celtic_mandelbrot(t_fractal *fractal);
-
-void		julia_calc(t_fractal *data);
-void		mandelbrot_calc(t_fractal *data);
-void		burning_ship_calc(t_fractal *data);
-
-void		fractal_pthread(t_fractal *data, void *(f)(void *));
-
-void		calc_fractal(t_fractal *fractal);
+void		init_heart_mandelbrot(t_fractal *fractal);
 
 void 		*julia(void *data);
-void		*mandelbrot(void *tab);
-void		*burning_ship(void *tab);
-void		*tricorn(void *tab);
-void		*douady_rabbit(void *tab);
-void		*celtic_mandelbrot(void *tab);
+void		*mandelbrot(void *data);
+void		*burning_ship(void *data);
+void		*tricorn(void *data);
+void		*douady_rabbit(void *data);
+void		*celtic_mandelbrot(void *data);
+void		*heart_mandelbrot(void *data);
+/*
+** fractal_additional.c
+*/
+
+void		fractal_pthread(t_fractal *data, void *(f)(void *));
+void		calc_fractal(t_fractal *fractal);
+int 		select_fractal(t_fractal *fractal, char* param);
 
 
 #endif

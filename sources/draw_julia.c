@@ -14,18 +14,18 @@
 
 void init_julia(t_fractal *fractal)
 {
-	fractal->mouse.x0 = 0;
-	fractal->mouse.y0 = 0;
-	fractal->mouse.x = 0;
-	fractal->mouse.y = 0;
+	fractal->name = 0;
+	fractal->mouse.x = WIDTH / 2;
+	fractal->mouse.y = HEIGHT / 2;
 	fractal->x1 = -2.3;
 	fractal->y1 = -2.3;
-	fractal->cRe = 0.285;
-	fractal->cIm = 0.01;
+	fractal->cRe = -0.85;
+	fractal->cIm = 0;
 	fractal->zoom = 200;
 	fractal->max_it = 50;
 	fractal->color = 265;
 	fractal->lock = 0;
+
 }
 
 void	julia_calc(t_fractal *data)
@@ -36,30 +36,30 @@ void	julia_calc(t_fractal *data)
 	while (data->zRe * data->zRe + data->zIm * data->zIm <= 4 && data->cur_it < data->max_it)
 	{
 		data->tmp = data->zRe;
-		data->zRe = data->zRe * data->zRe - data->zIm * data->zIm - 0.8 + (data->cRe / WIDTH);
-		data->zIm = 2 * data->zIm * data->tmp + data->cIm / WIDTH;
+		data->zRe = data->zRe * data->zRe - data->zIm * data->zIm + data->cRe;
+		data->zIm = 2 * data->zIm * data->tmp + data->cIm;
 		data->cur_it++;
 	}
 	get_color(data);
 }
 
-void	*julia(void *tab)
+void	*julia(void *data)
 {
 	int		tmp;
-	t_fractal	*data;
+	t_fractal	*fractal;
 
-	data = (t_fractal *)tab;
-	data->x = 0;
-	tmp = data->y;
-	while (data->x < WIDTH)
+	fractal = (t_fractal *)data;
+	fractal->x = 0;
+	tmp = fractal->y;
+	while (fractal->x < WIDTH)
 	{
-		data->y = tmp;
-		while (data->y < data->y_max)
+		fractal->y = tmp;
+		while (fractal->y < fractal->y_max)
 		{
-			julia_calc(data);
-			data->y++;
+			julia_calc(fractal);
+			fractal->y++;
 		}
-		data->x++;
+		fractal->x++;
 	}
-	return (tab);
+	return (data);
 }

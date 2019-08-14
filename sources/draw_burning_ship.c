@@ -14,6 +14,7 @@
 
 void init_burning_ship(t_fractal *fractal)
 {
+	fractal->name = 2;
 	fractal->x1 = -2.2;
 	fractal->y1 = -2.5;
 	fractal->zoom = 200;
@@ -38,23 +39,23 @@ void	burning_ship_calc(t_fractal *data)
 	get_color(data);
 }
 
-void	*burning_ship(void *tab)
+void	*burning_ship(void *data)
 {
 	int		tmp;
-	t_fractal	*data;
+	t_fractal	*fractal;
 
-	data = (t_fractal *)tab;
-	data->x = 0;
-	tmp = data->y;
-	while (data->x < WIDTH)
+	fractal = (t_fractal *)data;
+	fractal->x = 0;
+	tmp = fractal->y;
+	while (fractal->x < WIDTH)
 	{
-		data->y = tmp;
-		while (data->y < data->y_max)
+		fractal->y = tmp;
+		while (fractal->y < fractal->y_max)
 		{
-			burning_ship_calc(data);
-			data->y++;
+			burning_ship_calc(fractal);
+			fractal->y++;
 		}
-		data->x++;
+		fractal->x++;
 	}
-	return (tab);
+	return (data);
 }

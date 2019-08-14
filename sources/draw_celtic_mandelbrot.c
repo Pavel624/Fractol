@@ -14,10 +14,11 @@
 
 void init_celtic_mandelbrot(t_fractal *fractal)
 {
+	fractal->name = 5;
 	fractal->x1 = -2.8;
 	fractal->y1 = -2.3;
 	fractal->zoom = 200;
-	fractal->max_it = 100;
+	fractal->max_it = 50;
 	fractal->color = 265;
 }
 
@@ -38,23 +39,23 @@ void	celtic_mandelbrot_calc(t_fractal *data)
 	get_color(data);
 }
 
-void	*celtic_mandelbrot(void *tab)
+void	*celtic_mandelbrot(void *data)
 {
 	int		tmp;
-	t_fractal	*data;
+	t_fractal	*fractal;
 
-	data = (t_fractal *)tab;
-	data->x = 0;
-	tmp = data->y;
-	while (data->x < WIDTH)
+	fractal = (t_fractal *)data;
+	fractal->x = 0;
+	tmp = fractal->y;
+	while (fractal->x < WIDTH)
 	{
-		data->y = tmp;
-		while (data->y < data->y_max)
+		fractal->y = tmp;
+		while (fractal->y < fractal->y_max)
 		{
-			celtic_mandelbrot_calc(data);
-			data->y++;
+			celtic_mandelbrot_calc(fractal);
+			fractal->y++;
 		}
-		data->x++;
+		fractal->x++;
 	}
-	return (tab);
+	return (data);
 }

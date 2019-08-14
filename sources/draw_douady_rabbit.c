@@ -14,6 +14,7 @@
 
 void init_douady_rabbit(t_fractal *fractal)
 {
+	fractal->name = 4;
 	fractal->x1 = -2.2;
 	fractal->y1 = -2.5;
 	fractal->cRe = 0.122;
@@ -38,23 +39,23 @@ void	douady_rabbit_calc(t_fractal *data)
 	get_color(data);
 }
 
-void	*douady_rabbit(void *tab)
+void	*douady_rabbit(void *data)
 {
 	int		tmp;
-	t_fractal	*data;
+	t_fractal	*fractal;
 
-	data = (t_fractal *)tab;
-	data->x = 0;
-	tmp = data->y;
-	while (data->x < WIDTH)
+	fractal = (t_fractal *)data;
+	fractal->x = 0;
+	tmp = fractal->y;
+	while (fractal->x < WIDTH)
 	{
-		data->y = tmp;
-		while (data->y < data->y_max)
+		fractal->y = tmp;
+		while (fractal->y < fractal->y_max)
 		{
-			douady_rabbit_calc(data);
-			data->y++;
+			douady_rabbit_calc(fractal);
+			fractal->y++;
 		}
-		data->x++;
+		fractal->x++;
 	}
-	return (tab);
+	return (data);
 }
