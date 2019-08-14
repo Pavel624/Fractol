@@ -12,7 +12,7 @@
 
 #include "../fractol.h"
 
-void init_celtic_mandelbrot(t_fractal *fractal)
+void	init_celtic_mandelbrot(t_fractal *fractal)
 {
 	fractal->name = 5;
 	fractal->x1 = -2.8;
@@ -24,16 +24,18 @@ void init_celtic_mandelbrot(t_fractal *fractal)
 
 void	celtic_mandelbrot_calc(t_fractal *data)
 {
-	data->cRe = data->x / data->zoom + data->x1;
-	data->cIm = data->y / data->zoom + data->y1;
-	data->zRe = 0;
-	data->zIm = 0;
+	data->c_re = data->x / data->zoom + data->x1;
+	data->c_im = data->y / data->zoom + data->y1;
+	data->z_re = 0;
+	data->z_im = 0;
 	data->cur_it = 0;
-	while (data->zRe * data->zRe + data->zIm * data->zIm < 4 && data->cur_it < data->max_it)
+	while (data->z_re * data->z_re + data->z_im * data->z_im < 4
+									&& data->cur_it < data->max_it)
 	{
-		data->tmp = data->zRe;
-		data->zRe = fabs(data->zRe * data->zRe - data->zIm * data->zIm) + data->cRe;
-		data->zIm = 2 * data->tmp * data->zIm + data->cIm;
+		data->tmp = data->z_re;
+		data->z_re = fabs(data->z_re * data->z_re -
+								data->z_im * data->z_im) + data->c_re;
+		data->z_im = 2 * data->tmp * data->z_im + data->c_im;
 		data->cur_it++;
 	}
 	get_color(data);
@@ -41,7 +43,7 @@ void	celtic_mandelbrot_calc(t_fractal *data)
 
 void	*celtic_mandelbrot(void *data)
 {
-	int		tmp;
+	int			tmp;
 	t_fractal	*fractal;
 
 	fractal = (t_fractal *)data;

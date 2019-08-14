@@ -47,7 +47,7 @@ $(LIBFT):
 clean:
 	@echo "$(RED)Suspending library files$(VIOLET)"
 	make -C libft clean
-	rm -rf *.o
+	rm -rf $(OBJ)
 
 fclean: clean
 	@echo "$(RED)Suspending project files$(VIOLET)"

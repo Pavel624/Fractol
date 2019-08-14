@@ -66,63 +66,63 @@ typedef struct	s_fractal
 	t_image		image;
 	t_mouse		mouse;
 	int			x;
-	int 		y;
+	int			y;
 	int			y_max;
-	double 		x1;
-	double 		y1;
+	double		x1;
+	double		y1;
 	double		zoom;
 	int			cur_it;
-	int 		max_it;
-	double 		tmp;
+	int			max_it;
+	double		tmp;
 	int			color;
-	double 		cRe;
-	double 		cIm;
-	double		zRe;
-	double 		zIm;
-	int 		lock;
+	double		c_re;
+	double		c_im;
+	double		z_re;
+	double		z_im;
+	int			lock;
 }				t_fractal;
 
 /*
 ** additional.c
 */
 
-void		print_menu();
-void		img_pixel_put(t_image *img, int x, int y, int color);
-void		get_color(t_fractal *fractal);
-int			key_trans(int key, t_fractal *fractal);
-int			key_down(int key);
+void			print_menu(void);
+void			img_pixel_put(t_image *img, int x, int y, int color);
+void			get_color(t_fractal *fractal);
+int				key_trans(int key, t_fractal *fractal);
+int				key_down(int key);
 
 /*
 ** mouse.c
 */
 
-void		zoom_in(int x, int y, t_fractal *fractal);
-void		zoom_out(int x, int y, t_fractal *fractal);
-int			mouse_moved(int x, int y, t_fractal *fractal);
-int			mouse(int mousecode, int x, int y, t_fractal *data);
+void			zoom_in(int x, int y, t_fractal *fractal);
+void			zoom_out(int x, int y, t_fractal *fractal);
+int				mouse_moved(int x, int y, t_fractal *fractal);
+int				mouse(int mousecode, int x, int y, t_fractal *data);
 
-void		init_julia(t_fractal *fractal);
-void		init_mandelbrot(t_fractal *fractal);
-void 		init_burning_ship(t_fractal *fractal);
-void 		init_tricorn(t_fractal *fractal);
-void 		init_douady_rabbit(t_fractal *fractal);
-void 		init_celtic_mandelbrot(t_fractal *fractal);
-void		init_heart_mandelbrot(t_fractal *fractal);
-
-void 		*julia(void *data);
-void		*mandelbrot(void *data);
-void		*burning_ship(void *data);
-void		*tricorn(void *data);
-void		*douady_rabbit(void *data);
-void		*celtic_mandelbrot(void *data);
-void		*heart_mandelbrot(void *data);
 /*
 ** fractal_additional.c
 */
 
-void		fractal_pthread(t_fractal *data, void *(f)(void *));
-void		calc_fractal(t_fractal *fractal);
-int 		select_fractal(t_fractal *fractal, char* param);
+void			fractal_pthread(t_fractal *data, void *(f)(void *));
+void			calc_fractal(t_fractal *fractal);
+int				select_fractal(t_fractal *fractal, char *param);
 
+void			init_julia(t_fractal *fractal);
+void			init_mandelbrot(t_fractal *fractal);
+void			init_burning_ship(t_fractal *fractal);
+void			init_tricorn(t_fractal *fractal);
+void			init_douady_rabbit(t_fractal *fractal);
+void			init_celtic_mandelbrot(t_fractal *fractal);
+void			init_heart_mandelbrot(t_fractal *fractal);
+
+void			*julia(void *data);
+void			*mandelbrot(void *data);
+void			*burning_ship(void *data);
+void			*tricorn(void *data);
+void			*douady_rabbit(void *data);
+void			*celtic_mandelbrot(void *data);
+void			*heart_mandelbrot(void *data);
 
 #endif

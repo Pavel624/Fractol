@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../fractol.h"
+#include "../fractol.h"
 
-void init_tricorn(t_fractal *fractal)
+void	init_tricorn(t_fractal *fractal)
 {
 	fractal->name = 3;
 	fractal->x1 = -2.5;
@@ -24,16 +24,18 @@ void init_tricorn(t_fractal *fractal)
 
 void	tricorn_calc(t_fractal *data)
 {
-	data->cRe = data->x / data->zoom + data->x1;
-	data->cIm = data->y / data->zoom + data->y1;
-	data->zRe = 0;
-	data->zIm = 0;
+	data->c_re = data->x / data->zoom + data->x1;
+	data->c_im = data->y / data->zoom + data->y1;
+	data->z_re = 0;
+	data->z_im = 0;
 	data->cur_it = 0;
-	while (data->zRe * data->zRe + data->zIm * data->zIm <= 4 && data->cur_it < data->max_it)
+	while (data->z_re * data->z_re + data->z_im * data->z_im <= 4
+									&& data->cur_it < data->max_it)
 	{
-		data->tmp = data->zRe * data->zRe - data->zIm * data->zIm + data->cRe;
-		data->zIm = -2 * data->zRe * data->zIm + data->cIm;
-		data->zRe = data->tmp;
+		data->tmp = data->z_re * data->z_re - data->z_im * data->z_im
+															+ data->c_re;
+		data->z_im = -2 * data->z_re * data->z_im + data->c_im;
+		data->z_re = data->tmp;
 		data->cur_it++;
 	}
 	get_color(data);
@@ -41,7 +43,7 @@ void	tricorn_calc(t_fractal *data)
 
 void	*tricorn(void *data)
 {
-	int		tmp;
+	int			tmp;
 	t_fractal	*fractal;
 
 	fractal = (t_fractal *)data;

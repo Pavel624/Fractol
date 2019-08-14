@@ -12,7 +12,7 @@
 
 #include "../fractol.h"
 
-int			mouse_moved(int x, int y, t_fractal *fractal)
+int		mouse_moved(int x, int y, t_fractal *fractal)
 {
 	t_mouse *mouse;
 
@@ -21,9 +21,10 @@ int			mouse_moved(int x, int y, t_fractal *fractal)
 	mouse->y0 = mouse->y;
 	mouse->x = x;
 	mouse->y = y;
-	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && fractal->lock == 0) {
-		fractal->cRe += (mouse->x - mouse->x0) / WIDTH;
-		fractal->cIm += (mouse->y - mouse->y0) / WIDTH;
+	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT && fractal->lock == 0)
+	{
+		fractal->c_re += (mouse->x - mouse->x0) / WIDTH;
+		fractal->c_im += (mouse->y - mouse->y0) / WIDTH;
 		fractal_pthread(fractal, julia);
 	}
 	return (0);
@@ -31,21 +32,21 @@ int			mouse_moved(int x, int y, t_fractal *fractal)
 
 void	zoom_in(int x, int y, t_fractal *fractal)
 {
-	fractal->x1 = (x / fractal->zoom + fractal->x1) - (x / (fractal->zoom * 1.2));
-	fractal->y1 = (y / fractal->zoom + fractal->y1) - (y / (fractal->zoom * 1.2));
+	fractal->x1 = (x / fractal->zoom + fractal->x1) - x / (fractal->zoom * 1.2);
+	fractal->y1 = (y / fractal->zoom + fractal->y1) - y / (fractal->zoom * 1.2);
 	fractal->zoom *= 1.2;
 	fractal->max_it++;
 }
 
 void	zoom_out(int x, int y, t_fractal *fractal)
 {
-	fractal->x1 = (x / fractal->zoom + fractal->x1)  - (x / (fractal->zoom / 1.2));
-	fractal->y1 = (y / fractal->zoom + fractal->y1) - (y / (fractal->zoom / 1.2));
+	fractal->x1 = (x / fractal->zoom + fractal->x1) - x / (fractal->zoom / 1.2);
+	fractal->y1 = (y / fractal->zoom + fractal->y1) - y / (fractal->zoom / 1.2);
 	fractal->zoom /= 1.2;
 	fractal->max_it--;
 }
 
-int			mouse(int button, int x, int y, t_fractal *fractal)
+int		mouse(int button, int x, int y, t_fractal *fractal)
 {
 	if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT)
 	{

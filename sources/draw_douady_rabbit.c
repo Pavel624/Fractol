@@ -10,15 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../fractol.h"
+#include "../fractol.h"
 
-void init_douady_rabbit(t_fractal *fractal)
+void	init_douady_rabbit(t_fractal *fractal)
 {
 	fractal->name = 4;
 	fractal->x1 = -2.2;
 	fractal->y1 = -2.5;
-	fractal->cRe = 0.122;
-	fractal->cIm = 0.744;
+	fractal->c_re = 0.122;
+	fractal->c_im = 0.744;
 	fractal->zoom = 200;
 	fractal->max_it = 50;
 	fractal->color = 265;
@@ -26,14 +26,16 @@ void init_douady_rabbit(t_fractal *fractal)
 
 void	douady_rabbit_calc(t_fractal *data)
 {
-	data->zRe = data->x / data->zoom + data->x1;
-	data->zIm = data->y / data->zoom + data->y1;
+	data->z_re = data->x / data->zoom + data->x1;
+	data->z_im = data->y / data->zoom + data->y1;
 	data->cur_it = 0;
-	while (data->zRe * data->zRe + data->zIm * data->zIm <= 4 && data->cur_it < data->max_it)
+	while (data->z_re * data->z_re + data->z_im * data->z_im <= 4
+									&& data->cur_it < data->max_it)
 	{
-		data->tmp = data->zRe * data->zRe - data->zIm * data->zIm - data->cRe;
-		data->zIm = 2 * data->zRe * data->zIm + data->cIm;
-		data->zRe = data->tmp;
+		data->tmp = data->z_re * data->z_re - data->z_im * data->z_im
+																- data->c_re;
+		data->z_im = 2 * data->z_re * data->z_im + data->c_im;
+		data->z_re = data->tmp;
 		data->cur_it++;
 	}
 	get_color(data);
@@ -41,7 +43,7 @@ void	douady_rabbit_calc(t_fractal *data)
 
 void	*douady_rabbit(void *data)
 {
-	int		tmp;
+	int			tmp;
 	t_fractal	*fractal;
 
 	fractal = (t_fractal *)data;

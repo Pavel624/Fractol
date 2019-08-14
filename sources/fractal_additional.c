@@ -32,7 +32,7 @@ void	fractal_pthread(t_fractal *data, void *(func)(void *))
 	mlx_put_image_to_window(data->mlx, data->window, data->image.image, 0, 0);
 }
 
-void calc_fractal(t_fractal *fractal)
+void	calc_fractal(t_fractal *fractal)
 {
 	if (fractal->max_it < 0)
 		fractal->max_it = 0;
@@ -52,9 +52,9 @@ void calc_fractal(t_fractal *fractal)
 		fractal_pthread(fractal, heart_mandelbrot);
 }
 
-int select_fractal(t_fractal *fractal, char* param)
+int		select_fractal(t_fractal *fractal, char *param)
 {
-	if (ft_strcmp("julia",param) == 0)
+	if (ft_strcmp("julia", param) == 0)
 		init_julia(fractal);
 	else if (ft_strcmp("mandelbrot", param) == 0)
 		init_mandelbrot(fractal);
