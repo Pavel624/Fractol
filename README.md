@@ -6,6 +6,7 @@ You can zoom in and out with the mouse wheel. Obviously pattern repeats when you
 fractal you can change real and imaginary part of a constant. There are 5 different color schemes which set using NUMPAD.
 Multithreading is also implemented so program runs much more faster. 
 See menu in the console to get additional information.
+![](https://user-images.githubusercontent.com/39954654/63109213-55134480-bf91-11e9-82e4-ce109c38cfb3.png)
 ## Useful links
 1. [Julia and Mandelbrot Sets](https://lodev.org/cgtutor/juliamandelbrot.html)
 2. [Useful wiki for this project](https://github.com/VBrazhnik/Fract-ol/wiki)
